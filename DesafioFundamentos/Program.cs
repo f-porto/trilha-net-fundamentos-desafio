@@ -1,22 +1,29 @@
-﻿using DesafioFundamentos.Models;
+﻿using System.Text.Json;
+using DesafioFundamentos.Models;
 
 // Coloca o encoding para UTF8 para exibir acentuação
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-decimal precoInicial = 0;
-decimal precoPorHora = 0;
+string arquivoConfig = "config.json";
+Valores valores;
+if (!File.Exists(arquivoConfig))
+{
+    valores = new Valores();
+    DefinirValores();
+    string config = JsonSerializer.Serialize(valores);
+    File.WriteAllText(arquivoConfig, config);
+}
+else
+{
+    string config = File.ReadAllText(arquivoConfig);
+    valores = JsonSerializer.Deserialize<Valores>(config);
+}
 
-Console.WriteLine("Seja bem vindo ao sistema de estacionamento!\n" +
-                  "Digite o preço inicial:");
-precoInicial = Convert.ToDecimal(Console.ReadLine());
-
-Console.WriteLine("Agora digite o preço por hora:");
-precoPorHora = Convert.ToDecimal(Console.ReadLine());
+string arquivoVeiculos = "veiculos.txt";
 
 // Instancia a classe Estacionamento, já com os valores obtidos anteriormente
-Estacionamento es = new Estacionamento(precoInicial, precoPorHora);
+Estacionamento es = new Estacionamento(valores.PrecoInicial, valores.PrecoPorHora);
 
-string opcao = string.Empty;
 bool exibirMenu = true;
 
 // Realiza o loop do menu
@@ -27,9 +34,11 @@ while (exibirMenu)
     Console.WriteLine("1 - Cadastrar veículo");
     Console.WriteLine("2 - Remover veículo");
     Console.WriteLine("3 - Listar veículos");
-    Console.WriteLine("4 - Encerrar");
+    Console.WriteLine("4 - Mudar configuração");
+    Console.WriteLine("5 - Encerrar");
 
-    switch (Console.ReadLine())
+    string opcao = Console.ReadLine().Trim();
+    switch (opcao)
     {
         case "1":
             es.AdicionarVeiculo();
@@ -42,8 +51,14 @@ while (exibirMenu)
         case "3":
             es.ListarVeiculos();
             break;
-
+        
         case "4":
+            DefinirValores();
+            string config = JsonSerializer.Serialize(valores);
+            File.WriteAllText(arquivoConfig, config);
+            break;
+
+        case "5":
             exibirMenu = false;
             break;
 
@@ -58,3 +73,19 @@ while (exibirMenu)
 }
 
 Console.WriteLine("O programa se encerrou");
+
+void DefinirValores()
+{
+    Console.WriteLine("Seja bem vindo ao sistema de estacionamento!\n" +
+                      "Digite o preço inicial:");
+    valores.PrecoInicial = Convert.ToDecimal(Console.ReadLine());
+
+    Console.WriteLine("Agora digite o preço por hora:");
+    valores.PrecoPorHora = Convert.ToDecimal(Console.ReadLine());
+}
+
+struct Valores
+{
+    public decimal PrecoInicial { get; set; }
+    public decimal PrecoPorHora { get; set; }
+}
