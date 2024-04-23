@@ -12,11 +12,29 @@ namespace DesafioFundamentos.Models
             this.precoPorHora = precoPorHora;
         }
 
+        private static string LerPlaca()
+        {
+            while (true)
+            {
+                Console.WriteLine("Digite a placa do veículo para estacionar:");
+                string placa = Console.ReadLine().Trim().ToUpper();
+                if (placa.Length > 0)
+                {
+                    return placa;
+                }
+                Console.WriteLine("Por favor digite a placa do veículo");
+            }
+        }
+
         public void AdicionarVeiculo()
         {
-            // TODO: Pedir para o usuário digitar uma placa (ReadLine) e adicionar na lista "veiculos"
-            // *IMPLEMENTE AQUI*
-            Console.WriteLine("Digite a placa do veículo para estacionar:");
+            string placa = LerPlaca();
+            while (veiculos.Any(v => v == placa))
+            {
+                Console.WriteLine("Essa placa já foi registrada");
+                placa = LerPlaca();
+            }
+            veiculos.Add(placa);
         }
 
         public void RemoverVeiculo()
@@ -36,7 +54,7 @@ namespace DesafioFundamentos.Models
                 // TODO: Realizar o seguinte cálculo: "precoInicial + precoPorHora * horas" para a variável valorTotal                
                 // *IMPLEMENTE AQUI*
                 int horas = 0;
-                decimal valorTotal = 0; 
+                decimal valorTotal = 0;
 
                 // TODO: Remover a placa digitada da lista de veículos
                 // *IMPLEMENTE AQUI*
