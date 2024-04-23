@@ -19,10 +19,14 @@ else
     valores = JsonSerializer.Deserialize<Valores>(config);
 }
 
-string arquivoVeiculos = "veiculos.txt";
-
 // Instancia a classe Estacionamento, já com os valores obtidos anteriormente
 Estacionamento es = new Estacionamento(valores.PrecoInicial, valores.PrecoPorHora);
+
+string arquivoVeiculos = "veiculos.txt";
+if (File.Exists(arquivoVeiculos))
+{
+    es.CarregarVeiculos(arquivoVeiculos);
+}
 
 bool exibirMenu = true;
 
@@ -56,6 +60,8 @@ while (exibirMenu)
             DefinirValores();
             string config = JsonSerializer.Serialize(valores);
             File.WriteAllText(arquivoConfig, config);
+            es.PrecoInicial = valores.PrecoInicial;
+            es.PrecoPorHora = valores.PrecoPorHora;
             break;
 
         case "5":
@@ -72,6 +78,7 @@ while (exibirMenu)
     Console.WriteLine();
 }
 
+es.SalvarVeiculos(arquivoVeiculos);
 Console.WriteLine("O programa se encerrou");
 
 void DefinirValores()

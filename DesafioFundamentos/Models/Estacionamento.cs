@@ -2,14 +2,14 @@ namespace DesafioFundamentos.Models
 {
     public class Estacionamento
     {
-        private decimal precoInicial = 0;
-        private decimal precoPorHora = 0;
+        public decimal PrecoInicial { get; set; }
+        public decimal PrecoPorHora { get; set; }
         private List<string> veiculos = new List<string>();
 
         public Estacionamento(decimal precoInicial, decimal precoPorHora)
         {
-            this.precoInicial = precoInicial;
-            this.precoPorHora = precoPorHora;
+            PrecoInicial = precoInicial;
+            PrecoPorHora = precoPorHora;
         }
 
         private static string LerPlaca(string mensagem)
@@ -58,7 +58,7 @@ namespace DesafioFundamentos.Models
                     Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
                     entrada = Console.ReadLine().Trim();
                 }
-                decimal valorTotal = precoInicial + precoPorHora * horas;
+                decimal valorTotal = PrecoInicial + PrecoPorHora * horas;
                 veiculos.Remove(placa);
 
                 Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal:F2}");
@@ -84,6 +84,24 @@ namespace DesafioFundamentos.Models
             {
                 Console.WriteLine("Não há veículos estacionados.");
             }
+        }
+
+        public void CarregarVeiculos(string nomeArquivo)
+        {
+            foreach (string veiculo in File.ReadLines(nomeArquivo))
+            {
+                veiculos.Add(veiculo);
+            }
+        }
+
+        public void SalvarVeiculos(string nomeArquivo)
+        {
+            StreamWriter arquivo = new(nomeArquivo);
+            foreach (string veiculo in veiculos)
+            {
+                arquivo.WriteLine(veiculo);
+            }
+            arquivo.Close();
         }
     }
 }

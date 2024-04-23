@@ -5,6 +5,7 @@
 
 .mono
 config.json
+veiculos.txt
 
 # User-specific files
 *.rsuser
