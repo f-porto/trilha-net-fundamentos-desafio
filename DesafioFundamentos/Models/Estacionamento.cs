@@ -29,12 +29,15 @@ namespace DesafioFundamentos.Models
         public void AdicionarVeiculo()
         {
             string placa = LerPlaca("Digite a placa do veículo para estacionar:");
-            while (veiculos.Any(v => v == placa))
+            if (veiculos.Any(v => v == placa))
             {
                 Console.WriteLine("Essa placa já foi registrada");
-                placa = LerPlaca("Digite a placa do veículo para estacionar:");
             }
-            veiculos.Add(placa);
+            else
+            {
+                veiculos.Add(placa);
+                Console.WriteLine($"O veículo com placa '{placa}' for adicionado");
+            }
         }
 
         public void RemoverVeiculo()
@@ -58,7 +61,7 @@ namespace DesafioFundamentos.Models
                 decimal valorTotal = precoInicial + precoPorHora * horas;
                 veiculos.Remove(placa);
 
-                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
+                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal:F2}");
             }
             else
             {
